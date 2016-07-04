@@ -67,13 +67,13 @@ namespace Trencadis.Tools.TextTransformations.Factories
                 return null;
             }
 
-            var pattern = element.Attribute("pattern");
+            var pattern = ReadAttributeOrInnerElementValue(element, "pattern");
 
-            var replacement = element.Attribute("replacement");
+            var replacement = ReadAttributeOrInnerElementValue(element, "replacement");
 
-            if ((pattern != null) && (!string.IsNullOrEmpty(pattern.Value)) && (replacement != null) && (!string.IsNullOrEmpty(replacement.Value)))
+            if ((!string.IsNullOrEmpty(pattern)) && (!string.IsNullOrEmpty(replacement)))
             {
-                var transformation = new RegexReplaceTextTransformation(pattern.Value, replacement.Value);
+                var transformation = new RegexReplaceTextTransformation(pattern, replacement);
 
                 return transformation;
             }
@@ -83,15 +83,47 @@ namespace Trencadis.Tools.TextTransformations.Factories
 
         protected virtual ITextTransformation CreateStringReplaceTextTransformation(XElement element)
         {
-            var pattern = element.Attribute("pattern");
-
-            var replacement = element.Attribute("replacement");
-
-            if ((pattern != null) && (!string.IsNullOrEmpty(pattern.Value)) && (replacement != null) && (!string.IsNullOrEmpty(replacement.Value)))
+            if (element == null)
             {
-                var transformation = new StringReplaceTextTransformation(pattern.Value, replacement.Value);
+                return null;
+            }
+
+            var pattern = ReadAttributeOrInnerElementValue(element, "pattern");
+
+            var replacement = ReadAttributeOrInnerElementValue(element, "replacement");
+
+            if ((!string.IsNullOrEmpty(pattern)) && (!string.IsNullOrEmpty(replacement)))
+            {
+                var transformation = new StringReplaceTextTransformation(pattern, replacement);
 
                 return transformation;
+            }
+
+            return null;
+        }
+
+        protected string ReadAttributeOrInnerElementValue(XElement element, string attributeOrElementName)
+        {
+            if(element == null)
+            {
+                return null;
+            }
+
+            if(string.IsNullOrWhiteSpace(attributeOrElementName))
+            {
+                return null;
+            }
+
+            var attribute = element.Attribute(attributeOrElementName);
+            if(attribute != null)
+            {
+                return attribute.Value;
+            }
+
+            var innerElement = element.Element(attributeOrElementName);
+            if(innerElement != null)
+            {
+                return innerElement.Value;
             }
 
             return null;
