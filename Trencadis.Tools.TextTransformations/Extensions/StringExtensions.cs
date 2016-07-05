@@ -28,11 +28,11 @@ namespace Trencadis.Tools.TextTransformations.Extensions
         /// Returns a flag indicating whether the specified text represents a valid xml document or fragment
         /// </summary>
         /// <param name="text">The text to check</param>
-        /// <param name="xmlElement">Output parameter: the parsed xml element</param>
+        /// <param name="xmlDocument">Output parameter: the parsed xml element</param>
         /// <returns>True if the text represents a xml document or fragment, false otherwise</returns>
-        public static bool IsXml(this string text, out XDocument xmlElement)
+        public static bool IsXml(this string text, out XDocument xmlDocument)
         {
-            xmlElement = null;
+            xmlDocument = null;
 
             if (string.IsNullOrWhiteSpace(text))
             {
@@ -53,7 +53,7 @@ namespace Trencadis.Tools.TextTransformations.Extensions
 
             try
             {
-                xmlElement = XDocument.Parse(text, LoadOptions.PreserveWhitespace);
+                xmlDocument = XDocument.Parse(text, LoadOptions.PreserveWhitespace);
 
                 return true;
             }
