@@ -10,6 +10,10 @@ namespace Trencadis.Tools.TextTransformations.Factories
     using System.Collections.Generic;
     using System.Xml.Linq;
 
+    using Trencadis.Tools.TextTransformations.Transformations.Regex;
+    using Trencadis.Tools.TextTransformations.Transformations.String;
+    using Trencadis.Tools.TextTransformations.Transformations.Xml;
+
     /// <summary>
     /// Factory class, creates <see cref="ITextTransformationsFactory"/> instances based on the configuration xml
     /// </summary>
