@@ -15,11 +15,6 @@ namespace Trencadis.Tools.TextTransformations
     public class RegexReplaceTextTransformation : ITextTransformation
     {
         /// <summary>
-        /// Holds the pattern to search
-        /// </summary>
-        private readonly string pattern;
-
-        /// <summary>
         /// Holds the replacement for the pattern-matched text
         /// </summary>
         private readonly string replacement;
@@ -45,8 +40,6 @@ namespace Trencadis.Tools.TextTransformations
             {
                 throw new ArgumentNullException("pattern");
             }
-
-            this.pattern = pattern;
 
             this.replacement = replacement;
 
