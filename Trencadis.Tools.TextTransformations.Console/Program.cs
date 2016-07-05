@@ -1,12 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿// ---------------------------------------------------------------------------------------------------------------------------------------
+// <copyright file="Program.cs" company="Trencadis">
+// Copyright (c) 2016, Trencadis, All rights reserved
+// </copyright>
+// ---------------------------------------------------------------------------------------------------------------------------------------
 
 namespace Trencadis.Tools.TextTransformations.Console
 {
+    using System;
+    using System.IO;
+
     class Program
     {
         const string paramToConfigTransformationDefinitions = "-config";
@@ -91,7 +93,7 @@ namespace Trencadis.Tools.TextTransformations.Console
                 Environment.Exit(1);
             }
 
-            if(!File.Exists(pathToConfigTransformationDefinitions))
+            if (!File.Exists(pathToConfigTransformationDefinitions))
             {
                 System.Console.WriteLine(
                     "File '{0}' doesn't exist",
