@@ -45,6 +45,7 @@
     <Compile Include="ITextTransformation.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RegexReplaceTextTransformation.cs" />
+    <Compile Include="RemoveEmptyXmlNodeTextTransformation.cs" />
     <Compile Include="RemoveXmlNodeTextTransformation.cs" />
     <Compile Include="StringReplaceTextTransformation.cs" />
     <Compile Include="TextTransformationsFacade.cs" />

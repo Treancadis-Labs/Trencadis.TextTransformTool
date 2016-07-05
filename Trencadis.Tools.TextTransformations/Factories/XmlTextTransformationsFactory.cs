@@ -80,6 +80,10 @@ namespace Trencadis.Tools.TextTransformations.Factories
             {
                 return CreateRemoveXmlNodeTextTransformation(element);
             }
+            else if (string.Equals(tagName, typeof(RemoveEmptyXmlNodeTextTransformation).Name, StringComparison.OrdinalIgnoreCase))
+            {
+                return CreateRemoveEmptyXmlNodeTextTransformation(element);
+            }
 
             return null;
         }
@@ -158,6 +162,23 @@ namespace Trencadis.Tools.TextTransformations.Factories
             }
 
             return null;
+        }
+
+        /// <summary>
+        /// Creates an instance of <see cref="RemoveEmptyXmlNodeTextTransformation"/> based on the xml element configuration
+        /// </summary>
+        /// <param name="element">The xml element specifying the text transformation configuration</param>
+        /// <returns>An instance of <see cref="RemoveEmptyXmlNodeTextTransformation"/></returns>
+        protected virtual ITextTransformation CreateRemoveEmptyXmlNodeTextTransformation(XElement element)
+        {
+            if (element == null)
+            {
+                return null;
+            }
+
+            var transformation = new RemoveEmptyXmlNodeTextTransformation();
+
+            return transformation;
         }
 
         /// <summary>
