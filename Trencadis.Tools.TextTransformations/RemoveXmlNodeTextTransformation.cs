@@ -61,7 +61,7 @@ namespace Trencadis.Tools.TextTransformations
                 nodes.Remove();
             }
 
-            return xml.ToString();
+            return xml.ToString(SaveOptions.DisableFormatting);
         }
     }
 }

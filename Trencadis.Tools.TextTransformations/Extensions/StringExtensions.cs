@@ -53,7 +53,7 @@ namespace Trencadis.Tools.TextTransformations.Extensions
 
             try
             {
-                xmlElement = XElement.Parse(trimmedText);
+                xmlElement = XElement.Parse(text, LoadOptions.PreserveWhitespace);
 
                 return true;
             }
