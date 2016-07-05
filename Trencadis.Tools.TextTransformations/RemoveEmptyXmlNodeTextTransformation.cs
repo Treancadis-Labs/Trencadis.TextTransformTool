@@ -37,7 +37,7 @@ namespace Trencadis.Tools.TextTransformations
 
             var emptyNodes = xml
                 .Descendants()
-                .Where(x => string.IsNullOrWhiteSpace(x.Value));
+                .Where(x => (!x.HasElements) && (!x.HasAttributes) && (string.IsNullOrWhiteSpace(x.Value)));
 
             if (emptyNodes != null)
             {
