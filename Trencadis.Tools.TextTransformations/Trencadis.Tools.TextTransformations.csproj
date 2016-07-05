@@ -40,6 +40,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Extensions\StringExtensions.cs" />
+    <Compile Include="Extensions\XDocumentExtensions.cs" />
     <Compile Include="Factories\ITextTransformationsFactory.cs" />
     <Compile Include="Factories\XmlTextTransformationsFactory.cs" />
     <Compile Include="ITextTransformation.cs" />

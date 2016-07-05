@@ -20,7 +20,7 @@ namespace Trencadis.Tools.TextTransformations.Extensions
         /// <returns>True if the text represents a xml document or fragment, false otherwise</returns>
         public static bool IsXml(this string text)
         {
-            XElement xmlElement;
+            XDocument xmlElement;
             return text.IsXml(out xmlElement);
         }
 
@@ -30,7 +30,7 @@ namespace Trencadis.Tools.TextTransformations.Extensions
         /// <param name="text">The text to check</param>
         /// <param name="xmlElement">Output parameter: the parsed xml element</param>
         /// <returns>True if the text represents a xml document or fragment, false otherwise</returns>
-        public static bool IsXml(this string text, out XElement xmlElement)
+        public static bool IsXml(this string text, out XDocument xmlElement)
         {
             xmlElement = null;
 
@@ -53,7 +53,7 @@ namespace Trencadis.Tools.TextTransformations.Extensions
 
             try
             {
-                xmlElement = XElement.Parse(text, LoadOptions.PreserveWhitespace);
+                xmlElement = XDocument.Parse(text, LoadOptions.PreserveWhitespace);
 
                 return true;
             }

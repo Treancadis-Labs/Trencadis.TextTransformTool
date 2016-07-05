@@ -49,7 +49,7 @@ namespace Trencadis.Tools.TextTransformations
                 return input;
             }
 
-            XElement xml;
+            XDocument xml;
             if ((!input.IsXml(out xml)) || (xml == null))
             {
                 return input;
@@ -61,7 +61,7 @@ namespace Trencadis.Tools.TextTransformations
                 nodes.Remove();
             }
 
-            return xml.ToString(SaveOptions.DisableFormatting);
+            return xml.ToStringWithDeclaration(SaveOptions.DisableFormatting);
         }
     }
 }
