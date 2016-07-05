@@ -1,18 +1,29 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml;
-using System.Xml.Linq;
+﻿// ---------------------------------------------------------------------------------------------------------------------------------------
+// <copyright file="XmlTextTransformationsFactory.cs" company="Trencadis">
+// Copyright (c) 2016, Trencadis, All rights reserved
+// </copyright>
+// ---------------------------------------------------------------------------------------------------------------------------------------
 
 namespace Trencadis.Tools.TextTransformations.Factories
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Xml.Linq;
+
+    /// <summary>
+    /// Factory class, creates <see cref="ITextTransformationsFactory"/> instances based on the configuration xml
+    /// </summary>
     public class XmlTextTransformationsFactory : ITextTransformationsFactory
     {
+        /// <summary>
+        /// Holds the xml elements that specify text transformations config
+        /// </summary>
         private readonly IEnumerable<XElement> elements;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="XmlTextTransformationsFactory"/> class
+        /// </summary>
+        /// <param name="elements">The xml elements that specify text transformations config</param>
         public XmlTextTransformationsFactory(IEnumerable<XElement> elements)
         {
             if (elements == null)
@@ -23,6 +34,10 @@ namespace Trencadis.Tools.TextTransformations.Factories
             this.elements = elements;
         }
 
+        /// <summary>
+        /// Creates and returns the list of text transformations that correspond to the given xml configuration
+        /// </summary>
+        /// <returns>The list of text transformations</returns>
         public IEnumerable<ITextTransformation> CreateTextTransformations()
         {
             var result = new List<ITextTransformation>();
@@ -39,6 +54,11 @@ namespace Trencadis.Tools.TextTransformations.Factories
             return result;
         }
 
+        /// <summary>
+        /// Creates an instance of <see cref="ITextTransformation"/> based on the xml element configuration
+        /// </summary>
+        /// <param name="element">The xml element specifying the text transformation to create</param>
+        /// <returns>An instance of <see cref="ITextTransformation"/></returns>
         protected virtual ITextTransformation CreateTransformationForElement(XElement element)
         {
             if (element == null)
@@ -56,10 +76,19 @@ namespace Trencadis.Tools.TextTransformations.Factories
             {
                 return CreateStringReplaceTextTransformation(element);
             }
+            else if (string.Equals(tagName, typeof(RemoveXmlNodeTextTransformation).Name, StringComparison.OrdinalIgnoreCase))
+            {
+                return CreateRemoveXmlNodeTextTransformation(element);
+            }
 
             return null;
         }
 
+        /// <summary>
+        /// Creates an instance of <see cref="RegexReplaceTextTransformation"/> based on the xml element configuration
+        /// </summary>
+        /// <param name="element">The xml element specifying the text transformation configuration</param>
+        /// <returns>An instance of <see cref="RegexReplaceTextTransformation"/></returns>
         protected virtual ITextTransformation CreateRegexReplaceTextTransformation(XElement element)
         {
             if (element == null)
@@ -67,9 +96,9 @@ namespace Trencadis.Tools.TextTransformations.Factories
                 return null;
             }
 
-            var pattern = ReadAttributeOrInnerElementValue(element, "pattern");
+            var pattern = ReadAttributeOrChildElementValue(element, "pattern");
 
-            var replacement = ReadAttributeOrInnerElementValue(element, "replacement");
+            var replacement = ReadAttributeOrChildElementValue(element, "replacement");
 
             if ((!string.IsNullOrEmpty(pattern)) && (!string.IsNullOrEmpty(replacement)))
             {
@@ -81,6 +110,11 @@ namespace Trencadis.Tools.TextTransformations.Factories
             return null;
         }
 
+        /// <summary>
+        /// Creates an instance of <see cref="StringReplaceTextTransformation"/> based on the xml element configuration
+        /// </summary>
+        /// <param name="element">The xml element specifying the text transformation configuration</param>
+        /// <returns>An instance of <see cref="StringReplaceTextTransformation"/></returns>
         protected virtual ITextTransformation CreateStringReplaceTextTransformation(XElement element)
         {
             if (element == null)
@@ -88,9 +122,9 @@ namespace Trencadis.Tools.TextTransformations.Factories
                 return null;
             }
 
-            var pattern = ReadAttributeOrInnerElementValue(element, "pattern");
+            var pattern = ReadAttributeOrChildElementValue(element, "pattern");
 
-            var replacement = ReadAttributeOrInnerElementValue(element, "replacement");
+            var replacement = ReadAttributeOrChildElementValue(element, "replacement");
 
             if ((!string.IsNullOrEmpty(pattern)) && (!string.IsNullOrEmpty(replacement)))
             {
@@ -102,26 +136,56 @@ namespace Trencadis.Tools.TextTransformations.Factories
             return null;
         }
 
-        protected string ReadAttributeOrInnerElementValue(XElement element, string attributeOrElementName)
+        /// <summary>
+        /// Creates an instance of <see cref="RemoveXmlNodeTextTransformation"/> based on the xml element configuration
+        /// </summary>
+        /// <param name="element">The xml element specifying the text transformation configuration</param>
+        /// <returns>An instance of <see cref="RemoveXmlNodeTextTransformation"/></returns>
+        protected virtual ITextTransformation CreateRemoveXmlNodeTextTransformation(XElement element)
         {
-            if(element == null)
+            if (element == null)
             {
                 return null;
             }
 
-            if(string.IsNullOrWhiteSpace(attributeOrElementName))
+            var xpath = ReadAttributeOrChildElementValue(element, "xpath");
+
+            if (!string.IsNullOrEmpty(xpath))
+            {
+                var transformation = new RemoveXmlNodeTextTransformation(xpath);
+
+                return transformation;
+            }
+
+            return null;
+        }
+
+        /// <summary>
+        /// Tries to read the value from the specified attribute, or child xml element if no attribute can be found with the specified name
+        /// </summary>
+        /// <param name="element">The "parent" xml element</param>
+        /// <param name="attributeOrElementName">The attribute name, or child element name</param>
+        /// <returns>The value from the specified attribute or child xml element</returns>
+        protected string ReadAttributeOrChildElementValue(XElement element, string attributeOrElementName)
+        {
+            if (element == null)
+            {
+                return null;
+            }
+
+            if (string.IsNullOrWhiteSpace(attributeOrElementName))
             {
                 return null;
             }
 
             var attribute = element.Attribute(attributeOrElementName);
-            if(attribute != null)
+            if (attribute != null)
             {
                 return attribute.Value;
             }
 
             var innerElement = element.Element(attributeOrElementName);
-            if(innerElement != null)
+            if (innerElement != null)
             {
                 return innerElement.Value;
             }
